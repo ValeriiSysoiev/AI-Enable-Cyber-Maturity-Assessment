@@ -17,6 +17,7 @@ It uses advanced AI agents to analyze workshops, review documentation, identify 
 ---
 
 ## Solution Architecture
+![Solution Architecture Diagram](docs/images/readme/architecture.png)
 
 **Main Components:**
 - **Web Interface (Azure App Service):** Secure portal for consultants
@@ -51,7 +52,3 @@ It uses advanced AI agents to analyze workshops, review documentation, identify 
 7. **Generate Reports:** Click to generate executive-ready, customizable reports.
 8. **Continuous Monitoring:** Ongoing risk alerts and improvements.
 
----
-
-## Architecture Diagram
-![Solution Architecture Diagram](docs/images/readme/architecture.png)
