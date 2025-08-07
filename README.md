@@ -54,4 +54,4 @@ It uses advanced AI agents to analyze workshops, review documentation, identify 
 ---
 
 ## Architecture Diagram
-
+![Solution Architecture Diagram](docs/images/readme/architecture.png)
