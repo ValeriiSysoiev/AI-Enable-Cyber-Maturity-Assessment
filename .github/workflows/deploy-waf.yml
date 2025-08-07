@@ -10,6 +10,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -69,22 +71,12 @@ jobs:
       - name: Install Bicep CLI
         run: az bicep install
 
-      - name: Generate Resource Group Name
-        id: generate_rg_name
-        run: |
-          echo "Generating a unique resource group name..."
-          ACCL_NAME="macae"  # Account name as specified
-          SHORT_UUID=$(uuidgen | cut -d'-' -f1)
-          UNIQUE_RG_NAME="arg-${ACCL_NAME}-${SHORT_UUID}"
-          echo "RESOURCE_GROUP_NAME=${UNIQUE_RG_NAME}" >> $GITHUB_ENV
-          echo "Generated Resource_GROUP_PREFIX: ${UNIQUE_RG_NAME}"
-
       - name: Check and Create Resource Group
         id: check_create_rg
         run: |
-          set -e  
+          set -e
           echo "Checking if resource group exists..."
-          rg_exists=$(az group exists --name ${{ env.RESOURCE_GROUP_NAME }})
+          rg_exists=$(az group exists --resource-group ${{ env.RESOURCE_GROUP_NAME }})
           if [ "$rg_exists" = "false" ]; then
             echo "Resource group does not exist. Creating..."
             az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.AZURE_LOCATION }} || { echo "Error creating resource group"; exit 1; }
@@ -159,7 +151,7 @@ jobs:
         run: |
           set -e  
           echo "Checking if resource group exists..."
-          rg_exists=$(az group exists --name ${{ env.RESOURCE_GROUP_NAME }})
+          rg_exists=$(az group exists --resource-group ${{ env.RESOURCE_GROUP_NAME }})
           if [ "$rg_exists" = "true" ]; then
             echo "Resource group exist. Cleaning..."
             az group delete \
