@@ -16,10 +16,10 @@ To help you get started, here are some **Sample Prompts** you can ask in the app
 
 
 **Home Page**
-![HomePage](images/MACAE-GP1.png)
+![HomePage](architecture/diagrams/MACAE-GP1.png)
 
 **Task Page**
-![GeneratedPlan](images/MACAE-GP2.png)  
+![GeneratedPlan](architecture/diagrams/MACAE-GP2.png)  
 
 
 _This structured approach helps ensure the system handles prompts gracefully, verifies plan generation flows, and confirms RAI protections are working as intended._
