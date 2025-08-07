@@ -1,54 +1,57 @@
-# 🚀 Cyber AI-Enabled Maturity Assessment Solution
+# Cyber AI-Enabled Maturity Assessment Solution
 
 ## Overview
+Deloitte's Cyber AI-Enabled Maturity Assessment Solution is an Azure-based platform that helps
+consultants perform cybersecurity maturity assessments. It leverages a set of AI agents and an
+orchestrator to analyze workshops, review documentation, identify gaps, and produce professional
+reports.
 
-This repository contains Deloitte’s Cyber AI-Enabled Maturity Assessment Solution—a secure, Azure-based platform that automates and streamlines cybersecurity maturity assessments for consultants and clients.  
-It uses advanced AI agents to analyze workshops, review documentation, identify gaps, benchmark against standards, generate recommendations, and produce professional reports.
-
----
-
-## Key Features
-
-- **Automated Cyber Maturity Assessments:** AI-driven support for all phases—workshops, evidence collection, analysis, and reporting.
-- **Multi-Agent Orchestration:** Modular agents for workshop analysis, document review, benchmarking, gap analysis, initiative generation, and reporting.
-- **Consultant-Friendly Workflows:** Simple web interface, actionable dashboards, and explainable AI outputs.
-- **End-to-End Security & Compliance:** Azure-native, GDPR-ready, ISO 27001 and NIST CSF aligned.
-
----
+## Quick Start
+1. `python -m venv .venv && source .venv/bin/activate`
+2. `pip install -r requirements/backend.txt`
+3. `npm ci --prefix src/frontend`
+4. `pytest`
+5. `python -m src.orchestrator`
 
 ## Solution Architecture
-![Solution Architecture Diagram](docs/images/readme/architecture.png)
+![Solution Architecture Diagram](docs/architecture/diagrams/architecture.png)
 
-**Main Components:**
-- **Web Interface (Azure App Service):** Secure portal for consultants
-- **AI Orchestrator (Azure Container Apps):** Central logic hub
-- **AI Agents:**
-  - Workshop Analyzer: Real-time guidance during workshops
-  - Documentation Analyzer: Reviews uploaded docs for evidence
-  - Gap Analysis: Identifies gaps and generates recommendations
-  - Benchmarking & Targeting: Industry comparison and target setting
-  - Initiative Generator: Suggests projects to close gaps
-  - Prioritization Agent: Ranks initiatives for impact
-  - Roadmap Planner: Builds timelines/resources
-  - Report Generator: Creates professional deliverables
-  - Monitoring Agent: Tracks operations and detects anomalies
-- **Azure OpenAI Service:** Advanced AI and language processing
-- **Azure Cosmos DB:** Secure data and audit log storage
-- **Azure Key Vault:** Manages secrets and keys
-- **Azure Active Directory:** Secure identity and RBAC
-- **Monitoring & Logging:** Azure Monitor, Sentinel
-- **Infrastructure-as-Code:** Bicep/Terraform for Azure deployment
+## Repository Structure
+```
+.
+├── docker/              # Container build definitions
+│   ├── backend/Dockerfile
+│   └── frontend/Dockerfile
+├── src/                 # Application source code
+│   ├── agents/
+│   ├── auth/
+│   ├── backend/
+│   ├── frontend/
+│   ├── orchestrator/
+│   ├── tools/
+│   └── utils/
+├── infra/               # Infrastructure-as-code templates
+│   ├── modules/
+│   └── main.bicep
+├── docs/
+│   ├── architecture/
+│   │   ├── ARCHITECTURE.md
+│   │   └── diagrams/
+│   ├── DeploymentGuide.md
+│   ├── LocalDeployment.md
+│   └── ManualAzureDeployment.md
+├── tests/               # Unit, integration, and e2e tests
+├── pipelines/           # CI/CD definitions
+│   └── azure-dev.yml
+├── config/              # Configuration samples
+├── requirements/        # Python dependency lists
+└── README.md
+```
 
----
+## Development
+- `docker/backend/Dockerfile` builds the API container
+- `docker/frontend/Dockerfile` builds the web UI container
+- `pipelines/azure-dev.yml` deploys infrastructure and application
 
-## How It Works: Consultant Workflow
-
-1. **Login:** Consultant signs in securely via Azure AD.
-2. **Start Assessment:** Create a new project, select standards (NIST, ISO, etc.).
-3. **Workshop:** AI suggests live follow-ups/questions during client sessions.
-4. **Upload Documents:** AI analyzes client documentation and maps maturity.
-5. **Review Results:** Automated gap analysis, recommendations, and benchmarks provided for consultant review.
-6. **Build Roadmap:** AI agents suggest initiatives and a clear action plan.
-7. **Generate Reports:** Click to generate executive-ready, customizable reports.
-8. **Continuous Monitoring:** Ongoing risk alerts and improvements.
-
+## Contributing & License
+See `CONTRIBUTING.md` for contribution guidelines and `LICENSE` for license information.
