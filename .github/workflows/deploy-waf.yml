@@ -11,7 +11,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      RESOURCE_GROUP_NAME: ${{ secrets.RESOURCE_GROUP }}
+      RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -76,10 +76,10 @@ jobs:
         run: |
           set -e
           echo "Checking if resource group exists..."
-          rg_exists=$(az group exists --resource-group ${{ env.RESOURCE_GROUP_NAME }})
+          rg_exists=$(az group exists --resource-group ${{ env.RESOURCE_GROUP }})
           if [ "$rg_exists" = "false" ]; then
             echo "Resource group does not exist. Creating..."
-            az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.AZURE_LOCATION }} || { echo "Error creating resource group"; exit 1; }
+            az group create --name ${{ env.RESOURCE_GROUP }} --location ${{ env.AZURE_LOCATION }} || { echo "Error creating resource group"; exit 1; }
           else
             echo "Resource group already exists."
           fi
@@ -98,7 +98,7 @@ jobs:
         run: |
           set -e
           az deployment group create \
-            --resource-group ${{ env.RESOURCE_GROUP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
             --template-file infra/main.bicep \
             --parameters \
               environmentName=${{ env.SOLUTION_PREFIX }} \
@@ -133,13 +133,13 @@ jobs:
 
 
           set -e
-          echo "Fetching OpenAI resource from resource group ${{ env.RESOURCE_GROUP_NAME }}..."
+          echo "Fetching OpenAI resource from resource group ${{ env.RESOURCE_GROUP }}..."
 
           # Run the az resource list command to get the OpenAI resource name
-          openai_resource_name=$(az resource list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --resource-type "Microsoft.CognitiveServices/accounts" --query "[0].name" -o tsv)
+          openai_resource_name=$(az resource list --resource-group ${{ env.RESOURCE_GROUP }} --resource-type "Microsoft.CognitiveServices/accounts" --query "[0].name" -o tsv)
 
           if [ -z "$openai_resource_name" ]; then
-            echo "No OpenAI resource found in resource group ${{ env.RESOURCE_GROUP_NAME }}."
+            echo "No OpenAI resource found in resource group ${{ env.RESOURCE_GROUP }}."
             exit 1
           else
             echo "OPENAI_RESOURCE_NAME=${openai_resource_name}" >> $GITHUB_ENV
@@ -151,14 +151,14 @@ jobs:
         run: |
           set -e  
           echo "Checking if resource group exists..."
-          rg_exists=$(az group exists --resource-group ${{ env.RESOURCE_GROUP_NAME }})
+          rg_exists=$(az group exists --resource-group ${{ env.RESOURCE_GROUP }})
           if [ "$rg_exists" = "true" ]; then
             echo "Resource group exist. Cleaning..."
             az group delete \
-                --name ${{ env.RESOURCE_GROUP_NAME }} \
+                --name ${{ env.RESOURCE_GROUP }} \
                 --yes \
                 --no-wait
-            echo "Resource group deleted...  ${{ env.RESOURCE_GROUP_NAME }}"
+            echo "Resource group deleted...  ${{ env.RESOURCE_GROUP }}"
           else
             echo "Resource group does not exists."
           fi
@@ -184,7 +184,7 @@ jobs:
             resource_found=false
 
             # Get the list of resources in YAML format again on each retry
-            resource_list=$(az resource list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --output yaml)
+            resource_list=$(az resource list --resource-group ${{ env.RESOURCE_GROUP }} --output yaml)
 
             # Iterate through the resources to check
             for resource in "${resources_to_check[@]}"; do
@@ -223,7 +223,7 @@ jobs:
 
           # Purge OpenAI Resource
           echo "Purging the OpenAI Resource..."
-          if ! az resource delete --ids /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/providers/Microsoft.CognitiveServices/locations/eastus/resourceGroups/${{ env.RESOURCE_GROUP_NAME }}/deletedAccounts/${{ env.OPENAI_RESOURCE_NAME }} --verbose; then
+          if ! az resource delete --ids /subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/providers/Microsoft.CognitiveServices/locations/eastus/resourceGroups/${{ env.RESOURCE_GROUP }}/deletedAccounts/${{ env.OPENAI_RESOURCE_NAME }} --verbose; then
             echo "Failed to purge openai resource: ${{ env.OPENAI_RESOURCE_NAME }}"
           else
             echo "Purged the openai resource: ${{ env.OPENAI_RESOURCE_NAME }}"
