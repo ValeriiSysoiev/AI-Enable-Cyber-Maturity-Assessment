@@ -185,3 +185,42 @@ class AppConfig:
 
 # Create a global instance of AppConfig
 config = AppConfig()
+from pathlib import Path
+import yaml
+from pydantic import BaseModel
+
+
+class AgentsConfig(BaseModel):
+    agents: dict[str, str] = {}
+
+
+def load_agents_config(path: Path | None = None) -> AgentsConfig:
+    path = path or Path(__file__).resolve().parents[2] / "config" / "agents.yaml"
+    if path.exists():
+        data = yaml.safe_load(path.read_text()) or {}
+        return AgentsConfig(agents=data.get("agents", {}))
+    return AgentsConfig()
+
+
+_agents_config = load_agents_config()
+
+
+def get_agent_url(name: str) -> str | None:
+    return _agents_config.agents.get(name)
+
+
+class AzureSettings(BaseModel):
+    key_vault_url: str = ""
+    openai: dict = {}
+    cosmos: dict = {}
+
+
+def load_azure_settings(path: Path | None = None) -> AzureSettings:
+    path = path or Path(__file__).resolve().parents[2] / "config" / "azure.yaml"
+    if path.exists():
+        data = yaml.safe_load(path.read_text()) or {}
+        return AzureSettings(**data)
+    return AzureSettings()
+
+
+azure_settings = load_azure_settings()

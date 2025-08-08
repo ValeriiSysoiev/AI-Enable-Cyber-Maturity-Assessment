@@ -1,29 +1,22 @@
-# Architecture Overview
+# Architecture
 
-## Repository Layout
-- **src/** – application source code including orchestrator, agents, and utilities.
-- **infra/** – infrastructure-as-code templates (Bicep).
-- **docs/** – documentation and diagrams.
-- **tests/** – unit, integration, and end-to-end tests.
-- **config/** – configuration examples and environment files.
-- **requirements/** – Python dependency lists.
-- **pipelines/** – CI/CD definitions.
-- **docker/** – container build definitions.
+![Architecture](diagrams/architecture.png)
 
-## Solution Diagram
-![High-level architecture](diagrams/architecture.png)
+## Components
+- Web frontend
+- FastAPI orchestrator
+- Specialized agents (workshop, documents, gap, roadmap, report)
+- Azure Cosmos DB
+- Azure OpenAI
+- Azure Key Vault
+- Azure Active Directory
+- Azure Monitor
 
-This diagram shows the core components of the platform:
-- Web interface hosted on Azure App Service.
-- AI orchestrator and agents running in Azure Container Apps.
-- Data stored securely in Azure Cosmos DB and Key Vault.
-- Supporting Azure services such as OpenAI, Monitor, and Active Directory.
-
-## Data Flow
-User requests enter through the web interface, pass to the orchestrator, and are dispatched to
-specialized agents. Results and state are persisted to the data stores while telemetry flows to
-monitoring services.
-
-## Deployment
-Infrastructure is defined in `infra/main.bicep` and automated pipelines are provided in
-`pipelines/azure-dev.yml` for continuous deployment.
+## Consultant Flow
+1. Consultant uploads workshop transcript.
+2. Orchestrator calls Workshop Analyzer agent.
+3. Evidence stored in Cosmos DB.
+4. Gap Analysis agent evaluates controls.
+5. Initiatives are generated and prioritized.
+6. Roadmap planner sequences initiatives.
+7. Report generator produces deliverable stored for review.

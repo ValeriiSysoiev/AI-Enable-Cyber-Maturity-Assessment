@@ -1,6 +1,9 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
-name: multi-agent-custom-automation-engine-solution-accelerator
-metadata:
-  template: multi-agent-custom-automation-engine-solution-accelerator@1.0
-requiredVersions:
-  azd: ">=1.15.0 !=1.17.1"
+key_vault_url: "<vault-url>"
+openai:
+  endpoint: "<openai-endpoint>"
+  deployment: "<model-deployment-name>"
+  api_version: "2024-03-01-preview"
+cosmos:
+  url: "<cosmos-url>"
+  database: "<db-name>"
+  key_secret_name: "COSMOS-PRIMARY-KEY"
