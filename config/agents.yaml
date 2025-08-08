@@ -1,0 +1,10 @@
+agents:
+  workshop_analyzer: http://workshop-analyzer.internal:8080
+  documentation_analyzer: http://documentation-analyzer.internal:8080
+  gap_analysis: http://gap-analysis.internal:8080
+  benchmarking: http://benchmarking.internal:8080
+  initiative_generation: http://initiative-generation.internal:8080
+  prioritization: http://prioritization.internal:8080
+  roadmap_planner: http://roadmap-planner.internal:8080
+  report_generator: http://report-generator.internal:8080
+  monitoring_security: http://monitoring-security.internal:8080

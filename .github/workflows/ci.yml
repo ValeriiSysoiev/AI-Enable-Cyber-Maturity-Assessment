@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements/backend.txt
+      - run: pytest -q
+
+  build:
+    if: ${{ secrets.ACR_LOGIN_SERVER != '' }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: [orchestrator, workshop-analyzer]
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          docker build -t ${{ matrix.image }} -f docker/${{ matrix.image }}/Dockerfile .
+          if [ -n "${{ secrets.ACR_USERNAME }}" ]; then
+            echo ${{ secrets.ACR_PASSWORD }} | docker login ${{ secrets.ACR_LOGIN_SERVER }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+            docker tag ${{ matrix.image }} ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ github.sha }}
+            docker push ${{ secrets.ACR_LOGIN_SERVER }}/${{ matrix.image }}:${{ github.sha }}
+          fi
